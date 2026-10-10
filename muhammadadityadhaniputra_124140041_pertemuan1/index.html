@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oda-Ading — Mini POS</title>
+  <meta name="description" content="Aplikasi kasir & keranjang belanja sederhana untuk toko Oda-Ading. Tugas Praktikum Pertemuan 1 — JavaScript Dasar.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">OA</span>
+        <div>
+          <h1 class="brand-title">Oda-Ading</h1>
+          <p class="brand-subtitle">Toko &middot; Mini POS</p>
+        </div>
+      </div>
+      <span class="badge-pertemuan">Pertemuan 1 &middot; JavaScript Dasar</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============ FORM TAMBAH BARANG ============ -->
+    <section class="card" aria-labelledby="judul-form">
+      <h2 id="judul-form" class="card-title">Tambah Barang</h2>
+
+      <form id="form-tambah-barang" novalidate>
+        <div class="field">
+          <label for="input-nama">Nama barang</label>
+          <input type="text" id="input-nama" name="nama" placeholder="cth: Pensil 2B" autocomplete="off">
+          <p class="error-msg" id="error-nama" role="alert" hidden></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="input-harga">Harga satuan (Rp)</label>
+            <input type="number" id="input-harga" name="harga" placeholder="3000" min="0" inputmode="numeric">
+            <p class="error-msg" id="error-harga" role="alert" hidden></p>
+          </div>
+          <div class="field">
+            <label for="input-qty">Qty</label>
+            <input type="number" id="input-qty" name="qty" placeholder="4" min="0" step="1" inputmode="numeric">
+            <p class="error-msg" id="error-qty" role="alert" hidden></p>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Tambah ke keranjang</button>
+      </form>
+    </section>
+
+    <!-- ============ TABEL KERANJANG ============ -->
+    <section class="card" aria-labelledby="judul-keranjang">
+      <div class="section-head">
+        <h2 id="judul-keranjang" class="card-title">Keranjang</h2>
+        <button type="button" class="btn btn-ghost" id="btn-reset">Transaksi baru</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-no">No</th>
+              <th scope="col">Nama barang</th>
+              <th scope="col" class="col-num">Harga</th>
+              <th scope="col" class="col-num">Qty</th>
+              <th scope="col" class="col-num">Subtotal</th>
+              <th scope="col" class="col-aksi"><span class="sr-only">Aksi</span></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-keranjang"></tbody>
+        </table>
+
+        <div class="empty-state" id="empty-keranjang">
+          <p class="empty-title">Keranjang masih kosong</p>
+          <p class="empty-hint">Tambahkan barang lewat form di atas.</p>
+        </div>
+      </div>
+      <p class="storage-note">Data tersimpan otomatis di browser, tetap ada walau halaman di-refresh.</p>
+    </section>
+
+    <!-- ============ RINGKASAN ============ -->
+    <section class="card" aria-labelledby="judul-ringkasan">
+      <h2 id="judul-ringkasan" class="card-title">Ringkasan</h2>
+
+      <dl class="summary-rows">
+        <div class="summary-row">
+          <dt>Total belanja</dt>
+          <dd class="num" id="total-belanja">Rp 0</dd>
+        </div>
+        <div class="summary-row diskon" id="baris-diskon" hidden>
+          <dt>Diskon <span class="diskon-sumber" id="diskon-sumber"></span></dt>
+          <dd class="num" id="diskon-nominal">−Rp 0</dd>
+        </div>
+        <div class="summary-row total-akhir">
+          <dt>Total bayar</dt>
+          <dd class="num" id="total-akhir">Rp 0</dd>
+        </div>
+      </dl>
+
+      <div class="promo-box">
+        <label for="input-promo">Kode promo</label>
+        <div class="promo-input-group">
+          <input type="text" id="input-promo" placeholder="cth: ODA10" autocomplete="off">
+          <button type="button" class="btn btn-secondary" id="btn-promo">Pakai</button>
+        </div>
+        <p class="promo-info" id="promo-info" role="status"></p>
+        <p class="promo-hint">Diskon 10% otomatis untuk belanja ≥ Rp 50.000, atau gunakan kode <strong>ODA10</strong>.</p>
+      </div>
+    </section>
+
+    <!-- ============ PEMBAYARAN ============ -->
+    <section class="card" aria-labelledby="judul-bayar">
+      <h2 id="judul-bayar" class="card-title">Pembayaran</h2>
+
+      <div class="field">
+        <label for="input-bayar">Uang bayar (Rp)</label>
+        <input type="number" id="input-bayar" placeholder="cth: 120000" min="0" inputmode="numeric">
+      </div>
+
+      <div class="kembalian-box" id="kembalian-box">
+        <span class="kembalian-label">Kembalian</span>
+        <span class="kembalian-nominal num" id="kembalian-nominal">Rp 0</span>
+        <p class="kembalian-pesan" id="kembalian-pesan" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Oda-Ading &middot; Tugas Praktikum Pertemuan 1 — JavaScript Dasar &middot; Muhammad Aditya Dhani Putra (124140041)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
