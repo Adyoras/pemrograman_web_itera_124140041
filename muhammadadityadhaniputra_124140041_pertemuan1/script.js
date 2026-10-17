@@ -1,13 +1,4 @@
-/* ==========================================================================
-   Oda-Ading — Mini POS
-   Logika aplikasi: validasi form, kalkulator otomatis, dan manajemen
-   keranjang dengan localStorage.
 
-   Mengikuti materi Pertemuan 1: fungsi kecil berpenamaan camelCase,
-   event handler via addEventListener, manipulasi DOM, dan array of objects.
-   ========================================================================== */
-
-// ---- Konstanta aturan bisnis ----
 const STORAGE_KEY = "odaading_keranjang";
 const NAMA_MINIMAL = 3;
 const HARGA_MINIMAL = 500;
@@ -15,11 +6,9 @@ const BATAS_DISKON_OTOMATIS = 50000;
 const PERSEN_DISKON = 0.1;
 const KODE_PROMO = "ODA10";
 
-// ---- State aplikasi ----
 let keranjang = [];
 let promoAktif = false;
 
-// ---- Elemen DOM ----
 const formTambah = document.getElementById("form-tambah-barang");
 const inputNama = document.getElementById("input-nama");
 const inputHarga = document.getElementById("input-harga");
@@ -40,7 +29,6 @@ const kembalianNominal = document.getElementById("kembalian-nominal");
 const kembalianPesan = document.getElementById("kembalian-pesan");
 const btnReset = document.getElementById("btn-reset");
 
-// ---- Util ----
 const formatRupiah = (angka) =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -48,7 +36,6 @@ const formatRupiah = (angka) =>
     minimumFractionDigits: 0,
   }).format(angka);
 
-// Amankan teks input pengguna sebelum dirender ke tabel.
 const escapeHtml = (teks) =>
   teks
     .replace(/&/g, "&amp;")
@@ -57,9 +44,7 @@ const escapeHtml = (teks) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-// ==========================================================================
-// VALIDASI FORM
-// ==========================================================================
+
 const validasiNama = (nama) => nama.trim().length >= NAMA_MINIMAL;
 
 const validasiHarga = (nilai) => {
@@ -94,15 +79,10 @@ const bersihkanSemuaError = () => {
   [inputNama, inputHarga, inputQty].forEach(sembunyikanError);
 };
 
-// ==========================================================================
-// KALKULATOR
-// ==========================================================================
 const hitungSubtotal = (item) => item.harga * item.qty;
 
 const hitungTotal = () => keranjang.reduce((sum, item) => sum + hitungSubtotal(item), 0);
 
-// Diskon 10%: dari kode promo jika aktif, kalau tidak dari total otomatis.
-// Keduanya tidak menumpuk — hanya satu sumber yang berlaku.
 const hitungDiskon = (total) => {
   if (promoAktif) {
     return { nominal: Math.round(total * PERSEN_DISKON), sumber: "PROMO" };
@@ -118,9 +98,6 @@ const hitungTotalAkhir = () => {
   return total - hitungDiskon(total).nominal;
 };
 
-// ==========================================================================
-// LOCALSTORAGE
-// ==========================================================================
 const simpanKeranjang = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(keranjang));
 };
@@ -130,7 +107,6 @@ const muatKeranjang = () => {
     const mentah = localStorage.getItem(STORAGE_KEY);
     if (!mentah) return;
     const data = JSON.parse(mentah);
-    // Pastikan bentuk datanya valid sebelum dipakai.
     if (Array.isArray(data)) {
       keranjang = data.filter(
         (item) =>
@@ -145,10 +121,6 @@ const muatKeranjang = () => {
     keranjang = [];
   }
 };
-
-// ==========================================================================
-// RENDER
-// ==========================================================================
 const renderTabel = () => {
   if (keranjang.length === 0) {
     tbodyKeranjang.innerHTML = "";
@@ -193,8 +165,6 @@ const renderRingkasan = () => {
 
 const renderKembalian = () => {
   const nilai = inputBayar.value;
-
-  // Input kosong: kembalikan ke tampilan awal.
   if (nilai === "") {
     kembalianBox.classList.remove("kurang", "cukup");
     kembalianNominal.textContent = formatRupiah(0);
@@ -232,10 +202,6 @@ const renderSemua = () => {
   renderRingkasan();
   renderKembalian();
 };
-
-// ==========================================================================
-// AKSI
-// ==========================================================================
 const tambahBarang = (event) => {
   event.preventDefault();
 
@@ -325,17 +291,12 @@ const resetTransaksi = () => {
   inputNama.focus();
 };
 
-// ==========================================================================
-// INISIALISASI
-// ==========================================================================
 formTambah.addEventListener("submit", tambahBarang);
 
-// Validasi langsung hilang saat pengguna memperbaiki input.
 [inputNama, inputHarga, inputQty].forEach((inputEl) => {
   inputEl.addEventListener("input", () => sembunyikanError(inputEl));
 });
 
-// Delegasi event untuk tombol hapus di setiap baris tabel.
 tbodyKeranjang.addEventListener("click", (event) => {
   const tombol = event.target.closest(".btn-hapus");
   if (tombol) hapusBarang(Number(tombol.dataset.id));
@@ -352,6 +313,5 @@ inputPromo.addEventListener("keydown", (event) => {
 inputBayar.addEventListener("input", renderKembalian);
 btnReset.addEventListener("click", resetTransaksi);
 
-// Muat keranjang tersimpan lalu render tampilan awal.
 muatKeranjang();
 renderSemua();
