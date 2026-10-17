@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard pribadi untuk membantu mahasiswa mengatur tugas kuliah.">
+  <meta name="theme-color" content="#f4f6f2">
+  <title>RuangKuliah — Personal Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="script.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#beranda" aria-label="RuangKuliah, beranda">
+        <span class="brand-icon" aria-hidden="true">rk</span>
+        <span class="brand-name">ruang<span>kuliah</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="semester-label"><span class="online-dot"></span> Semester Ganjil 2026/2027</span>
+        <span class="avatar" aria-label="Mahasiswa">AD</span>
+      </div>
+    </header>
+
+    <main id="beranda" class="main-content">
+      <section class="welcome-row" aria-labelledby="welcome-title">
+        <div>
+          <p class="eyebrow" id="tanggal-hari">HARI INI</p>
+          <h1 id="welcome-title">Halo, Aditya <span aria-hidden="true">✳</span></h1>
+          <p class="welcome-copy">Rencanakan sedikit demi sedikit, selesaikan satu per satu.</p>
+        </div>
+        <div class="week-chip"><span aria-hidden="true">◷</span> Ruang fokusmu</div>
+      </section>
+
+      <section class="quote-card" aria-label="Kutipan hari ini">
+        <div class="quote-symbol" aria-hidden="true">“</div>
+        <div class="quote-content" aria-live="polite">
+          <p class="quote-label">JEDA SEJENAK</p>
+          <blockquote id="kutipan">Sedikit kemajuan setiap hari akan membawa kita ke tujuan.</blockquote>
+          <p class="quote-author" id="penulis-kutipan">— Catatan hari ini</p>
+        </div>
+        <button class="icon-button quote-refresh" id="btn-kutipan" type="button" aria-label="Muat kutipan baru" title="Muat kutipan baru">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2"/></svg>
+        </button>
+      </section>
+
+      <section class="stats-grid" aria-label="Ringkasan tugas">
+        <article class="stat-card stat-total">
+          <div class="stat-top"><span class="stat-label">Semua tugas</span><span class="stat-icon icon-violet" aria-hidden="true">▤</span></div>
+          <p class="stat-number" id="jumlah-semua">0</p>
+          <p class="stat-note">yang sudah kamu catat</p>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-label">Belum selesai</span><span class="stat-icon icon-amber" aria-hidden="true">◷</span></div>
+          <p class="stat-number" id="jumlah-pending">0</p>
+          <p class="stat-note">masih menunggu aksimu</p>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-label">Sudah beres</span><span class="stat-icon icon-green" aria-hidden="true">✓</span></div>
+          <p class="stat-number" id="jumlah-selesai">0</p>
+          <p class="stat-note" id="catatan-progres">langkah kecil tetap berarti</p>
+        </article>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="tasks-panel" aria-labelledby="tasks-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">DAFTAR KERJA</p>
+              <h2 id="tasks-title">Tugas kuliah <span class="task-count" id="label-jumlah">0</span></h2>
+            </div>
+            <button class="text-button" id="btn-fokus" type="button">Lihat yang aktif <span aria-hidden="true">→</span></button>
+          </div>
+
+          <div class="progress-track" aria-label="Progres penyelesaian tugas">
+            <span class="progress-fill" id="progres-bar"></span>
+          </div>
+
+          <div class="filter-row" role="group" aria-label="Filter tugas">
+            <button class="filter-button active" type="button" data-filter="semua" aria-pressed="true">Semua</button>
+            <button class="filter-button" type="button" data-filter="aktif" aria-pressed="false">Belum selesai</button>
+            <button class="filter-button" type="button" data-filter="selesai" aria-pressed="false">Selesai</button>
+          </div>
+
+          <div class="task-list" id="daftar-tugas" aria-live="polite"></div>
+        </section>
+
+        <aside class="form-panel" aria-labelledby="form-title">
+          <div class="form-heading">
+            <span class="form-heading-icon" aria-hidden="true">＋</span>
+            <div>
+              <p class="eyebrow">CATAT YANG PENTING</p>
+              <h2 id="form-title">Tugas baru</h2>
+            </div>
+          </div>
+          <form id="form-tugas" novalidate>
+            <div class="field">
+              <label for="input-judul">Nama tugas</label>
+              <input id="input-judul" name="judul" type="text" maxlength="90" placeholder="Contoh: Rangkuman materi DOM" required>
+              <p class="field-error" id="error-judul" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="input-mata-kuliah">Mata kuliah</label>
+              <input id="input-mata-kuliah" name="mataKuliah" type="text" maxlength="40" placeholder="Contoh: Pengembangan Web">
+            </div>
+            <div class="field-split">
+              <div class="field">
+                <label for="input-deadline">Batas waktu</label>
+                <input id="input-deadline" name="deadline" type="date">
+              </div>
+              <div class="field">
+                <label for="input-prioritas">Prioritas</label>
+                <select id="input-prioritas" name="prioritas">
+                  <option value="normal">Biasa</option>
+                  <option value="penting">Penting</option>
+                  <option value="mendesak">Mendesak</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" id="btn-simpan" type="submit">Simpan tugas <span aria-hidden="true">↗</span></button>
+              <button class="cancel-button" id="btn-batal" type="button" hidden>Batal</button>
+            </div>
+          </form>
+          <div class="privacy-note"><span aria-hidden="true">⌑</span> Catatanmu tersimpan di browser ini.</div>
+        </aside>
+      </div>
+
+      <footer class="page-footer">
+        <span>RuangKuliah <span class="footer-dot">·</span> Personal Dashboard</span>
+        <span>Dibuat untuk menemani hari-hari kuliahmu</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
