@@ -1,19 +1,10 @@
-/* ==========================================================================
-   Latihan Modul — Pertemuan 1: JavaScript Dasar
-   Muhammad Aditya Dhani Putra (124140041)
-   File latihan yang dikerjakan selama mengikuti materi praktikum.
-   ========================================================================== */
 
-// --------------------------------------------------------------------------
-// 1. Variabel & Kondisional
-// --------------------------------------------------------------------------
 const nama = "Muhammad Aditya Dhani Putra";
 let umur = 20;
 const kotaAsal = "[Kota Asal]";
 
 const nilaiUjian = 85;
 
-// If-else: cek kelulusan (syarat nilai >= 70)
 let statusLulus = "";
 if (nilaiUjian >= 70) {
   statusLulus = "Lulus";
@@ -21,10 +12,8 @@ if (nilaiUjian >= 70) {
   statusLulus = "Tidak Lulus";
 }
 
-// Ternary: versi ringkas dari cek yang sama
 const statusTernari = nilaiUjian >= 70 ? "Lulus" : "Tidak Lulus";
 
-// If-else if: kategori umur
 let kategoriUmur = "";
 if (umur < 12) {
   kategoriUmur = "anak";
@@ -45,9 +34,6 @@ document.getElementById("out-variabel").innerHTML = `
   <p>Nilai ${nilaiUjian}: <strong>${statusLulus}</strong> (kategori umur: ${kategoriUmur})</p>
 `;
 
-// --------------------------------------------------------------------------
-// 2. Fungsi & Kalkulator sederhana
-// --------------------------------------------------------------------------
 function hitung(angka1, angka2, operasi) {
   switch (operasi) {
     case "tambah":
@@ -78,9 +64,6 @@ document.getElementById("out-kalkulator").innerHTML = `
   <p>12 / 0 = <strong class="text-red-600">${hasilBagiNol}</strong></p>
 `;
 
-// --------------------------------------------------------------------------
-// 3. Loop: FizzBuzz 1-20
-// --------------------------------------------------------------------------
 const fizzbuzz = [];
 for (let i = 1; i <= 20; i++) {
   if (i % 15 === 0) {
@@ -110,9 +93,6 @@ document.getElementById("out-fizzbuzz").innerHTML = fizzbuzz
   })
   .join("");
 
-// --------------------------------------------------------------------------
-// 4. Array & Objek: data mahasiswa
-// --------------------------------------------------------------------------
 const daftarMahasiswa = [
   { nama: "[Nama]", nim: "124140041", jurusan: "Teknik Informatika", nilai: 88 },
   { nama: "Budi", nim: "124140001", jurusan: "Teknik Informatika", nilai: 75 },
@@ -135,12 +115,10 @@ const barisTabel = daftarMahasiswa
   )
   .join("");
 
-// Mahasiswa dengan nilai tertinggi (reduce)
 const terbaik = daftarMahasiswa.reduce((max, mhs) =>
   mhs.nilai > max.nilai ? mhs : max
 );
 
-// Rata-rata + filter yang di atas rata-rata
 const rataRata =
   daftarMahasiswa.reduce((sum, mhs) => sum + mhs.nilai, 0) /
   daftarMahasiswa.length;
@@ -167,9 +145,6 @@ document.getElementById("out-mahasiswa").innerHTML = `
      di atas rata-rata: ${diAtasRataRata.join(", ")}</p>
 `;
 
-// --------------------------------------------------------------------------
-// 5. localStorage: simpan & muat data sederhana
-// --------------------------------------------------------------------------
 const KUNCI = "latihan_nama";
 localStorage.setItem(KUNCI, JSON.stringify({ nama: nama, kota: kotaAsal }));
 
