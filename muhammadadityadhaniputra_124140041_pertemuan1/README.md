@@ -3,7 +3,7 @@
 ## Identitas
 - **Nama Lengkap:** Muhammad Aditya Dhani Putra
 - **NIM:** 124140041
-- **Kelas Praktikum:** [Kelas]
+- **Kelas Praktikum:** RA
 - **Pertemuan:** 1 — JavaScript Dasar
 
 ## Deskripsi Aplikasi
